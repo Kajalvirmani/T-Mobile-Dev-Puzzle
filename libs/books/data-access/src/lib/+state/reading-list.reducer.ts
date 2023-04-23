@@ -18,33 +18,33 @@ export interface ReadingListPartialState {
 export const readingListAdapter: EntityAdapter<ReadingListItem> = createEntityAdapter<
   ReadingListItem
 >({
-  selectId: item => item.bookId
+  selectId: (item) => item.bookId,
 });
 
 export const initialState: State = readingListAdapter.getInitialState({
   loaded: false,
-  error: null
+  error: null,
 });
 
 const readingListReducer = createReducer(
   initialState,
-  on(ReadingListActions.init, state => {
+  on(ReadingListActions.init, (state) => {
     return {
       ...state,
       loaded: false,
-      error: null
+      error: null,
     };
   }),
   on(ReadingListActions.loadReadingListSuccess, (state, action) => {
     return readingListAdapter.setAll(action.list, {
       ...state,
-      loaded: true
+      loaded: true,
     });
   }),
   on(ReadingListActions.loadReadingListError, (state, action) => {
     return {
       ...state,
-      error: action.error
+      error: action.error,
     };
   }),
   on(ReadingListActions.addToReadingList, (state, action) =>
@@ -52,8 +52,7 @@ const readingListReducer = createReducer(
   ),
   on(ReadingListActions.removeFromReadingList, (state, action) =>
     readingListAdapter.removeOne(action.item.bookId, state)
-  )
-  ,
+  ),
   on(ReadingListActions.failedAddToReadingList, (state, action) => {
     return readingListAdapter.removeOne(action.book.id, state);
   }),
@@ -72,6 +71,24 @@ const readingListReducer = createReducer(
       state
     );
   }),
+  on(ReadingListActions.markAsFinished, (state, action) => {
+    return readingListAdapter.updateOne(
+      {
+        id: action.item.bookId,
+        changes: {
+          finished: action.item.finished,
+          finishedDate: action.item.finishedDate,
+        },
+      },
+      state
+    );
+  }),
+  on(ReadingListActions.failedMarkAsFinished, (state, action) => {
+    return state;
+  }),
+  on(ReadingListActions.confirmedMarkAsFinished, (state, action) => {
+    return state;
+  })
 );
 
 export function reducer(state: State | undefined, action: Action) {
