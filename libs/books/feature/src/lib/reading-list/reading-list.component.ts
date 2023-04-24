@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
-import { addToReadingList, getReadingList, markAsFinished, removeFromReadingList } from '@tmo/books/data-access';
+import {
+  addToReadingList,
+  getReadingList,
+  markAsFinished,
+  removeFromReadingList,
+} from '@tmo/books/data-access';
 
 @Component({
   selector: 'tmo-reading-list',
   templateUrl: './reading-list.component.html',
-  styleUrls: ['./reading-list.component.scss']
+  styleUrls: ['./reading-list.component.scss'],
 })
 export class ReadingListComponent {
   readingList$ = this.store.select(getReadingList);
@@ -19,7 +24,7 @@ export class ReadingListComponent {
     this.store.dispatch(removeFromReadingList({ item }));
     this.snackBarRef = this._snackBar.open(
       `Removed book ${item.title}`,
-      'UNDO',
+      'UNDO'
     );
 
     this.snackBarRef.onAction().subscribe(async () => {
@@ -35,17 +40,7 @@ export class ReadingListComponent {
   }
 
   markAsFinished(item) {
-    const changes = {
-      finished: true,
-      finishedDate: new Date().toISOString(),
-    };
-    const finishedItem = { ...item, ...changes };
-    this._snackBar.open(
-      `Finished book ${
-        finishedItem.title
-      } on ${finishedItem?.finishedDate.substring(0, 10)}`,
-      'DONE'
-    );
-    this.store.dispatch(markAsFinished({ item: finishedItem }));
+    this._snackBar.open(`Finished book ${item.title} `, 'DONE');
+    this.store.dispatch(markAsFinished({ item }));
   }
 }
