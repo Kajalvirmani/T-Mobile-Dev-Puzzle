@@ -4,6 +4,7 @@ import { SharedTestingModule } from '@tmo/shared/testing';
 
 import { BooksFeatureModule } from '../books-feature.module';
 import { BookSearchComponent } from './book-search.component';
+import { searchBooks } from '@tmo/books/data-access';
 
 describe('ProductsListComponent', () => {
   let component: BookSearchComponent;
@@ -11,7 +12,7 @@ describe('ProductsListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BooksFeatureModule, NoopAnimationsModule, SharedTestingModule]
+      imports: [BooksFeatureModule, NoopAnimationsModule, SharedTestingModule],
     }).compileComponents();
   }));
 
@@ -23,5 +24,18 @@ describe('ProductsListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeDefined();
+  });
+  fit('should call search', () => {
+    spyOn(component, 'searchBooks');
+    const el = fixture.nativeElement.querySelector('input');
+    el.value = 'javascript';
+    el.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.searchBooks).toHaveBeenCalledWith('javascript');
+      expect(component['store'].dispatch).toHaveBeenCalledWith(
+        searchBooks({ term: 'javascript' })
+      );
+    });
   });
 });
