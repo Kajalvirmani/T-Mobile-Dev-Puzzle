@@ -65,8 +65,6 @@ export class BookSearchComponent implements OnInit {
         removeFromReadingList({
           item: {
             bookId: book.id,
-            finished: false,
-            finishedDate: null,
             ...book,
           },
         })
