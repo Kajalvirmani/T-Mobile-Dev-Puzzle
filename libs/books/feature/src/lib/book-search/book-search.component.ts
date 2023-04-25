@@ -23,7 +23,7 @@ export class BookSearchComponent implements OnInit {
   searchForm = this.fb.group({
     term: ''
   });
-  snackBarRef: any;
+  snackBarReference: any;
 
   constructor(
     private readonly store: Store,
@@ -49,8 +49,8 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
-    this.openSnackBar(`Added book ${book.title}`, 'UNDO');
-    this.snackBarRef.onAction().subscribe(async () => {
+    this.snackBarReference = this._snackBar.open(`Added book ${book.title}`, 'UNDO', { duration: 5000 });
+    this.snackBarReference.onAction().subscribe(async () => {
       this.store.dispatch(
         removeFromReadingList({
           item: {
@@ -74,8 +74,5 @@ export class BookSearchComponent implements OnInit {
       this.store.dispatch(clearSearch());
     }
   }
-
-  openSnackBar(message: string, action: string) {
-    this.snackBarRef = this._snackBar.open(message, action, { duration: 3000 });
-  }
+  
 }

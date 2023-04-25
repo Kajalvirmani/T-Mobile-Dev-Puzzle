@@ -36,8 +36,7 @@ describe('ProductsListComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BookSearchComponent);
-    component = fixture.componentInstance;
-    component.snackBarRef = snackBar.open('hey');
+    component = fixture.componentInstance;   
     fixture.detectChanges();
   });
 
@@ -52,19 +51,31 @@ describe('ProductsListComponent', () => {
       description: 'test description',
     };
 
-    const spy = spyOn(component, 'openSnackBar');
-    const spySnackBarAction = spyOn(
-      component.snackBarRef,
-      'onAction'
-    ).and.returnValue(of({}));
+    component.snackBarReference = spyOn(snackBar, 'open').and.returnValue({
+      onAction:()=>{
+        return of({})
+      }
+    });
+    const spyStore = spyOn(component['store'], 'dispatch');
 
     component.addBookToReadingList(book);
-    expect(spy).toHaveBeenCalled();
-    expect(spySnackBarAction).toHaveBeenCalled();
+    expect(snackBar.open).toHaveBeenCalled();
+    expect(spyStore).toHaveBeenCalled();
   });
-  it('should open snackbar', () => {
-    const spy = spyOn(snackBar, 'open');
-    component.openSnackBar('a', 'b');
+
+  it('should call searchbooks', () => {
+    component.searchForm.setValue({ term: 'test' });
+    const spy = spyOn(component['store'], 'dispatch');
+    component.searchBooks();
+    expect(spy).toHaveBeenCalled();
+    component.searchForm.setValue({ term: '' });
+    component.searchBooks();
     expect(spy).toHaveBeenCalled();
   });
+  it('should search example',()=>{
+    component.searchForm.controls.term.setValue('javascript');
+    const spy=spyOn(component,'searchBooks')
+    component.searchExample()
+    expect(spy).toHaveBeenCalled()
+  })
 });

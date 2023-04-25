@@ -12,7 +12,9 @@ describe('When: I use the reading list feature', () => {
     );
   });
   it('Then: I should see undo button', () => {
-    cy.get('#mat-input-0').type('Java');
+    cy.get('#mat-input-0').type('javascript');
+    cy.get('form').submit();
+    cy.wait(5000)
     cy.get('[data-testing="add-to-reading-list"]').first().click();
     cy.get('[data-testing="add-to-reading-list"]')
       .first()
@@ -21,5 +23,7 @@ describe('When: I use the reading list feature', () => {
     cy.get('[data-testing="remove-from-reading-list"]').first().click();
     cy.wait(300);
     cy.contains('button', 'UNDO').click();
+    cy.get('[data-testing="add-to-reading-list"]')
+    
   })
 });
