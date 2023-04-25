@@ -31,8 +31,8 @@
         data-testing="mark-as-finished-button"
         mat-icon-button
         color="black"
-        (click)="markAsFinished(b)"
-        [ngClass]="b.finished ? 'completed' : 'mark-as-completed'"
+        (click)="markBookAsFinished(b)"
+        [ngClass]="b.finished ? 'finished' : 'mark-as-finished'"
       >
         <mat-icon> check_circle</mat-icon>
       </button>

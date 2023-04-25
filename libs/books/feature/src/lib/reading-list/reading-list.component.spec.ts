@@ -51,7 +51,7 @@ describe('ReadingListComponent', () => {
       id: 'test',
     };
     const spy = spyOn(snackBar, 'open');
-    component.markAsFinished(item);
+    component.markBookAsFinished(item);
     expect(spy).toHaveBeenCalled()
   });
 });

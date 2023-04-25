@@ -24,7 +24,9 @@ export class ReadingListComponent {
     this.store.dispatch(removeFromReadingList({ item }));
     this.snackBarRef = this._snackBar.open(
       `Removed book ${item.title}`,
-      'UNDO'
+      'UNDO',{
+        duration:3000
+      }
     );
 
     this.snackBarRef.onAction().subscribe(async () => {
@@ -39,8 +41,8 @@ export class ReadingListComponent {
     });
   }
 
-  markAsFinished(item) {
-    this._snackBar.open(`Finished book ${item.title} `, 'DONE');
-    this.store.dispatch(markAsFinished({ item }));
+  markBookAsFinished(book) {
+    this._snackBar.open(`Finished book ${book.title} `, 'DONE');
+    this.store.dispatch(markAsFinished({ item :book}));
   }
 }
