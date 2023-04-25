@@ -9,8 +9,13 @@ import {
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
-import { Subject, Subscription, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, Subscription, of } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'tmo-book-search',
@@ -19,11 +24,11 @@ import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/o
 })
 export class BookSearchComponent implements OnInit, OnDestroy {
   books: ReadingListBook[];
-  subscriptionList: Subscription[] = [];
-  unSubscribe$=new Subject();
+
   searchForm = this.fb.group({
     term: '',
   });
+  subscription: Subscription;
 
   constructor(
     private readonly store: Store,
@@ -38,20 +43,16 @@ export class BookSearchComponent implements OnInit, OnDestroy {
     this.store.select(getAllBooks).subscribe((books) => {
       this.books = books;
     });
-    this.searchForm.valueChanges
-
+    this.subscription = this.searchForm.valueChanges
       .pipe(
-        takeUntil(this.unSubscribe$),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((query) => {
           return of(query);
         })
-      )
-
-      .subscribe((text: string) => {
-        this.searchBooks();
-      });
+      ).subscribe((val) => {
+        this.searchBooks(val);
+      });     
   }
 
   formatDate(date: void | string) {
@@ -66,19 +67,17 @@ export class BookSearchComponent implements OnInit, OnDestroy {
 
   searchExample() {
     this.searchForm.controls.term.setValue('javascript');
-    this.searchBooks();
+    this.searchBooks(this.searchTerm);
   }
 
-  searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
+  searchBooks(value?) {
+    if (value.term.trim()) {
+      this.store.dispatch(searchBooks({ term: value.term }));
     } else {
       this.store.dispatch(clearSearch());
     }
   }
   ngOnDestroy(): void {
-    this.unSubscribe$.next();
-
-    this.unSubscribe$.complete();
+    this.subscription.unsubscribe();
   }
 }

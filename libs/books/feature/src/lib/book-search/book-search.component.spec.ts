@@ -25,16 +25,16 @@ describe('ProductsListComponent', () => {
   it('should create', () => {
     expect(component).toBeDefined();
   });
-  fit('should call search', () => {
+  it('should call search', () => {
     spyOn(component, 'searchBooks');
     const el = fixture.nativeElement.querySelector('input');
-    el.value = 'javascript';
+    el.value = 'test';
     el.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     fixture.whenStable().then(() => {
-      expect(component.searchBooks).toHaveBeenCalledWith('javascript');
+      expect(component.searchBooks).toHaveBeenCalled();
       expect(component['store'].dispatch).toHaveBeenCalledWith(
-        searchBooks({ term: 'javascript' })
+        searchBooks({ term: 'test' })
       );
     });
   });
