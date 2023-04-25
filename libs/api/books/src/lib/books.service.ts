@@ -30,7 +30,7 @@ export class BooksService {
             };
           });
         }),catchError(err=>{
-          return of(`There is some issue with API ${err}`)
+          return of(`Some error occured ${err}`)
         })
       );
   }

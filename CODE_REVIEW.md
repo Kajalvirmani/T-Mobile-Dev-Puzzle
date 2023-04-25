@@ -1,16 +1,16 @@
 CODE_SMELL
 
-# Observables are not unsubscribed which would cause memory leak.
+# Observables are not unsubscribed . This would cause memory leak
 
 # Reducers (failedRemoveFromReadingList, confirmedRemoveFromReadingList, failedAddToReadingList, confirmedAddToReadingList) were not handled for reading list.component.
 
-# Spinner/Loader is required at the time of API calls to enhance user experience.
+# Spinner or Loader is required at the time of API calls to enhance user experience(till the data is not returned from API).
 
-# Instead of subscriptions we can use async pipe.
+# Can use async pipe instead of subscriptions.
 
 # In Books.service.ts file, there is no proper error handling if API is not responding.
 
-# The use of innerHTML creates a potential security risk for your website. 
+# Use of innerHTML in book-search.component.html creates a potential security risk for website.  
 
 
 

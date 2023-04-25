@@ -61,10 +61,10 @@ describe('Books Reducer', () => {
     });
     it('should remove from reading list',()=>{
       const action=ReadingListActions.removeFromReadingList({
-        item: createReadingListItem('D')
+        item: createReadingListItem('B')
       })
       const result:State=reducer(state,action)
-      expect(result.ids).toEqual(['A','B'])
+      expect(result.ids).toEqual(['A'])
     })
   });
 
