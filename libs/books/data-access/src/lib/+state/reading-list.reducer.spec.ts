@@ -51,6 +51,21 @@ describe('Books Reducer', () => {
 
       expect(result.ids).toEqual(['A', 'B', 'C']);
     });
+
+    it('should add to reading list',()=>{
+      const action=ReadingListActions.addToReadingList({
+        book: createBook('D')
+      })
+      const result:State=reducer(state,action)
+      expect(result.ids).toEqual(['A','B','D'])
+    });
+    it('should remove from reading list',()=>{
+      const action=ReadingListActions.removeFromReadingList({
+        item: createReadingListItem('B')
+      })
+      const result:State=reducer(state,action)
+      expect(result.ids).toEqual(['A'])
+    })
   });
 
   describe('unknown action', () => {
